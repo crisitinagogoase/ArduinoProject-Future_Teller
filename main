@@ -1,0 +1,157 @@
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+const int switchPin = 6;
+int switchState = 0;
+int prevSwitchState = 0;
+int reply;
+int sensorPin = A0;
+
+void setup() {
+  lcd.begin(16, 2);
+  pinMode(switchPin, INPUT);
+  lcd.print("Ask the");
+  lcd.setCursor(0,1);
+  lcd.print("Crystal House!");
+}
+
+byte anim2[8]={
+
+  B00000,
+
+  B01110,
+
+  B11011,
+
+  B11110,
+
+  B11100,
+
+  B11110,
+
+  B11111,
+
+  B01110
+
+};
+
+byte anim3[8]={
+
+  B00000,
+
+  B01110,
+
+  B11011,
+
+  B01111,
+
+  B00111,
+
+  B01111,
+
+  B11111,
+
+  B01110
+
+};
+
+void loop() {
+  delay(50);
+  int sensorVal = analogRead(sensorPin);
+  float voltage = (sensorVal /1024.0) * 5.0; //transforming the temp in Celsius degrees
+  float temp = (voltage - 0.5)*100;
+  switchState = digitalRead(switchPin);
+  if(switchState != prevSwitchState) {
+    if (switchState == LOW) {
+      reply = random (8);
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      //lcd.print("The ball says: ");
+      lcd.setCursor(0, 1);
+      
+      
+    for(int i=0;i<=15;i++){ /* using for loop to move the special characters on the second line of LCD*/
+
+    lcd.clear();
+
+    lcd.setCursor(i,1);/* giving a location to display second special character */
+
+    lcd.write(byte(8));// displaying the second special character
+
+    delay(100);
+
+    lcd.clear();
+
+  }
+
+      String tempReading;
+      if (temp >17 && temp <21)
+        tempReading = "Brr! Kinda cold.";
+        else if (temp >21 && temp <24)
+        tempReading = "Good for you!";
+        else if (temp >24 && temp <27)
+        tempReading = "Turn the AC On!";
+        else if (temp >27 && temp <35)
+        tempReading = "Too hot!";
+        else tempReading = "I'm melting!";
+
+      switch (reply) { // treating each care of answer and displaying also the temperature, along with the answer to the question
+        case 0:
+        lcd.setCursor(0, 0);
+        lcd.print(tempReading);
+        lcd.setCursor(0, 1);
+        lcd.print("H says: Yes");
+        break;
+        
+        case 1:
+        lcd.setCursor(0, 0);
+        lcd.print(tempReading);
+        lcd.setCursor(0, 1);
+        lcd.print("H: most likely");
+        break;
+
+        case 2:
+        lcd.setCursor(0, 0);
+        lcd.print(tempReading);
+        lcd.setCursor(0, 1);
+        lcd.print("H: Certainly");
+        break;
+
+        case 3:
+        lcd.setCursor(0, 0);
+        lcd.print(tempReading);
+        lcd.setCursor(0, 1);
+        lcd.print("House: Maybe");
+        break;
+
+        case 4:
+        lcd.setCursor(0, 0);
+        lcd.print(tempReading);
+        lcd.setCursor(0, 1);
+        lcd.print("House: Unsure");
+        break;
+
+        case 5:
+        lcd.setCursor(0, 0);
+        lcd.print(tempReading);
+        lcd.setCursor(0, 1);
+        lcd.print("H: Ask again");
+        break;
+
+        case 6:
+        lcd.setCursor(0, 0);
+        lcd.print(tempReading);
+        lcd.setCursor(0, 1);
+        lcd.print("H says: Doubtful");
+        break;
+
+        case 7:
+        lcd.setCursor(0, 0);
+        lcd.print(tempReading);
+        lcd.setCursor(0, 1);
+        lcd.print("H says: No");
+        break;
+      }
+    }
+  }
+  prevSwitchState = switchState;
+}
