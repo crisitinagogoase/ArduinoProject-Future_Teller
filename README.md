@@ -1,1 +1,2 @@
 # ArduinoProject-Future_Teller
+ The Future Prediction System is a project that uses a tilt sensor to predict future events and a temperature sensor based on which it displays a message. When connected to a computer, the system displays a prompt message for the user to ask a question. After a loading animation, the system presents the answer based on the tilt sensor's movement analysis and a message based on the temperature that the project is in. 
